@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/chat_preview.dart';
+import '../widgets/circle_cached_network_avatar.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -10,11 +11,22 @@ class HomeScreen extends StatelessWidget {
         slivers: [
           SliverAppBar(
             pinned: true,
-            title: Text('Chats',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                )),
+            title: Row(
+              children: [
+                CircleCachedNetworkAvatar(
+                  url: 'https://api.adorable.io/avatars/48',
+                  size: 36,
+                ),
+                SizedBox(width: 24),
+                Text(
+                  'Chats',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
             actions: [
               CustomActionButton(
                 icon: Icons.camera_alt,
@@ -27,6 +39,17 @@ class HomeScreen extends StatelessWidget {
               ),
               SizedBox(width: 16),
             ],
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              margin: EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(48),
+                color: Colors.grey[200],
+              ),
+              child: Text('Search'),
+            ),
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
