@@ -18,12 +18,12 @@ class HomeScreen extends StatelessWidget {
             actions: [
               CustomActionButton(
                 icon: Icons.camera_alt,
-                onTap: () => print('bonsoir'),
+                onPressed: () => print('bonsoir 1'),
               ),
               SizedBox(width: 16),
               CustomActionButton(
                 icon: Icons.edit,
-                onTap: () => print('bonsoir'),
+                onPressed: () => print('bonsoir 2'),
               ),
               SizedBox(width: 16),
             ],
@@ -32,7 +32,7 @@ class HomeScreen extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (ctx, index) => InkWell(
                 onTap: () => print('Tapped $index'),
-                child: ChatPreview(),
+                child: ChatPreview(key: ValueKey(index)),
               ),
               childCount: 100,
             ),
@@ -45,33 +45,25 @@ class HomeScreen extends StatelessWidget {
 
 class CustomActionButton extends StatelessWidget {
   final IconData icon;
-  final Function onTap;
+  final Function onPressed;
 
   const CustomActionButton({
     Key key,
     @required this.icon,
-    this.onTap,
+    this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 38,
-      child: LayoutBuilder(builder: (context, constraints) {
-        return Ink(
-          height: 20,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.grey[200],
-          ),
-          child: InkWell(
-            customBorder: const CircleBorder(),
-            splashColor: Colors.grey[400],
-            onTap: onTap,
-            child: Icon(icon),
-          ),
-        );
-      }),
+    return RawMaterialButton(
+      constraints: const BoxConstraints.tightFor(width: 38),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      elevation: 0,
+      highlightElevation: 0,
+      shape: CircleBorder(),
+      fillColor: Colors.grey[200],
+      child: Icon(icon),
+      onPressed: onPressed,
     );
   }
 }

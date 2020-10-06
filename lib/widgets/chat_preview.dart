@@ -1,8 +1,10 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-const avatarImage = NetworkImage(
-  'https://scontent-cdt1-1.xx.fbcdn.net/v/t1.0-9/72439280_10217608053185775_5842917185000833024_o.jpg?_nc_cat=110&_nc_sid=09cbfe&_nc_ohc=YXBSRbZl8lsAX_uQBUa&_nc_ht=scontent-cdt1-1.xx&oh=2347dffe5bcf04b606cd506fd997219d&oe=5F9F4D84',
-);
+import './circle_cached_network_avatar.dart';
+
+const faker = Faker();
 
 class ChatPreview extends StatelessWidget {
   const ChatPreview({
@@ -11,40 +13,56 @@ class ChatPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String avatarUrl = 'https://api.adorable.io/avatars/48/${key.toString()}';
+    String fakeName = faker.person.name();
+    String fakeMessageContent =
+        faker.lorem.words(faker.randomGenerator.integer(10, min: 3)).join(' ');
+    DateTime fakeDate =
+        faker.date.dateTime(minYear: now.year, maxYear: now.year);
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 24,
-            backgroundImage: avatarImage,
+          CircleCachedNetworkAvatar(url: avatarUrl),
+          SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  fakeName,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        fakeMessageContent,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: Text('•'),
+                    ),
+                    Text(
+                      DateFormat(
+                        fakeDate.difference(now).inHours < 12 ? 'Hm' : 'MMM d',
+                      ).format(fakeDate),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
           SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Jean Michel',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 5),
-              Row(
-                children: [
-                  Text('Some message'),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5),
-                    child: Text('•'),
-                  ),
-                  Text('19:00')
-                ],
-              )
-            ],
+          CircleCachedNetworkAvatar(
+            url: avatarUrl,
+            size: 20,
           ),
-          Expanded(child: Container()),
-          Icon(
-            Icons.check_circle,
-            color: Colors.grey,
-          )
         ],
       ),
     );
